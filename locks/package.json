@@ -1,0 +1,55 @@
+{
+  "name": "mobileweb-eq-logical-of-hot-stock-front-pod-child-b",
+  "version": "0.0.1",
+  "author": "shantenghui@myhexin.com",
+  "jira": "SJCGBS-37125",
+  "scripts": {
+    "start": "npm run dev:web",
+    "start:web": "npm run dev:web",
+    "start:hummer": "npm run dev:hummer",
+    "dev:web": "kingfisher start --target web --framework vue --mode dev",
+    "dev:hummer": "kingfisher start --target hummer",
+    "build:web": "kingfisher build --target web --framework vue",
+    "build:hummer": "kingfisher build --target hummer --framework vue",
+    "pb": "kingfisher publish --keepConfigurations true"
+  },
+  "peerDependencies": {
+    "vue": "^2.7.14"
+  },
+  "dependencies": {
+    "@atom/atom-ui": "^1.4.0",
+    "@atom/b2c-tokens": "^0.0.6",
+    "@hummer/hummer-fetch": "^0.0.3",
+    "@hummer/hummer-front": "^1.0.8",
+    "@king-fisher/apis": "^0.5.10",
+    "@king-fisher/app-vue": "^0.5.6",
+    "@king-fisher/env": "^0.5.6",
+    "@king-fisher/falcon": "^0.5.6-beta07",
+    "@king-fisher/store": "^0.0.7-beta02",
+    "@king-fisher/utils": "^0.5.4",
+    "@king-fisher/vue-components": "^0.5.26",
+    "@king-fisher/vue-plugin-canvas": "^0.5.1",
+    "core-js": "^3.6.5",
+    "dayjs": "^1.11.7",
+    "vue-router": "^3.2.0"
+  },
+  "devDependencies": {
+    "@king-fisher/cli": "^0.5.16",
+    "@king-fisher/publish": "^0.1.22",
+    "@king-fisher/vue-webpack": "^0.5.11",
+    "@typescript-eslint/eslint-plugin": "~5.4.0",
+    "@typescript-eslint/parser": "~5.4.0",
+    "@vue/cli-plugin-babel": "~5.0.0",
+    "@vue/cli-plugin-eslint": "~5.0.0",
+    "@vue/cli-plugin-router": "~5.0.0",
+    "@vue/cli-plugin-typescript": "~5.0.0",
+    "@vue/eslint-config-typescript": "~9.1.0",
+    "babel-plugin-import": "^1.13.6",
+    "eslint": "^7.32.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-vue": "^8.0.3",
+    "prettier": "~2.4.1",
+    "typescript": "~4.5.5"
+  }
+}
