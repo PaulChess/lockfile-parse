@@ -1,26 +1,28 @@
-/**
- * @description 获取 shrink file 文件名
- * @param {string} filePath shrink file 路径
- * @returns {ShrinkFileType} 文件名
- */
-
 import { readFileSync } from 'node:fs'
-import { basename, dirname, extname, join } from 'node:path'
+import { dirname, join } from 'node:path'
 import { cwd } from 'node:process'
 import yarnLock from '@yarnpkg/lockfile'
 import yaml from 'js-yaml'
-import type { IDependenceItem, IParseLockRes, IParseRes, PnpmLockResult, ShrinkFileType } from './types'
+import type {
+  IDependenceItem,
+  IParseLockRes,
+  IParseRes,
+  PnpmLockResult,
+} from './types'
 import { findShinkFiles } from './path'
-import { isTrueArray } from './utils'
+import {
+  getProjectInfo,
+  getShrinkFileName,
+  isTrueArray,
+  mergeVersions,
+} from './utils'
 
-function getShrinkFileName(filePath: string): ShrinkFileType {
-  const extName = extname(filePath)
-  const fileName = basename(filePath, extName) + extName
-
-  return fileName as ShrinkFileType
-}
-
-export function parseLockFile(filePath: string) {
+/**
+ * 解析单个 lock 文件
+ * @param filePath lock 文件的路径
+ * @returns {IParseLockRes}
+ */
+function parseSingleLockFile(filePath: string) {
   const fileName = getShrinkFileName(filePath)
   const fileContent = readFileSync(filePath, 'utf8')
 
@@ -51,6 +53,7 @@ export function parseLockFile(filePath: string) {
       const tempDependenceList: IDependenceItem[] = []
 
       for (const dependenceKey in dependencies) {
+        // 正向断言，匹配字符串中的最后一个 @ 字符，并取 @ 字符之前的内容
         const regex = /.*(?=@)/
         const match = dependenceKey.match(regex)
 
@@ -67,14 +70,16 @@ export function parseLockFile(filePath: string) {
           })
         }
       }
-      // 使用对象集合进行去重
-      parseLockFileRes.dependenceList = JSON.parse(JSON.stringify(
-        Array.from(
-          new Map(
-            tempDependenceList.map(item => [item.unique, item]),
-          ).values(),
+      // 由于 yarn.lock 中解析出来会有很多重复的数据，使用对象集合进行去重
+      parseLockFileRes.dependenceList = JSON.parse(
+        JSON.stringify(
+          Array.from(
+            new Map(
+              tempDependenceList.map(item => [item.unique, item]),
+            ).values(),
+          ),
         ),
-      ))
+      )
     }
     else if (fileName === 'pnpm-lock.yaml') {
       const pnpmLock = yaml.load(fileContent) as PnpmLockResult
@@ -82,6 +87,8 @@ export function parseLockFile(filePath: string) {
       const keyList = []
 
       for (const packageKey in packages) {
+        // 匹配字符串第开头的 / 到第一个 _ 中间的内容，不包含 / 和 _
+        // pnpm-lock 中会用 _ 来链接依赖和子依赖，需要去除子依赖
         const pattern = /^\/(.*?)(?:_|$)/
         const match = packageKey.match(pattern)
 
@@ -90,9 +97,11 @@ export function parseLockFile(filePath: string) {
           keyList.push(key)
         }
       }
+      // 数据去重
       const uniqueKeyList = [...new Set(keyList)]
 
       uniqueKeyList.forEach((key) => {
+        // pnpm-lock 的依赖名和版本号会用 / 来分割，需要取到最后一个 / 所在的位置，以此进行分割
         const lastSlashIndex = key.lastIndexOf('/')
 
         if (lastSlashIndex !== -1) {
@@ -107,86 +116,58 @@ export function parseLockFile(filePath: string) {
       })
     }
 
-    parseLockFileRes.dependenceMap = mergeVersions(parseLockFileRes.dependenceList)
+    // 由于同一个依赖名可能会有多个版本记录，因此对同一个依赖的多个版本进行合并，即一个依赖名对应一个版本数组
+    parseLockFileRes.dependenceMap = mergeVersions(
+      parseLockFileRes.dependenceList,
+    )
 
     return parseLockFileRes
   }
   catch (err) {
+    console.error('[@king-fisher/lockfile-parse parseSingleLockFile] error!')
     console.error(err)
   }
 }
 
-function mergeVersions(originData: IDependenceItem[]) {
-  const result: Record<string, string[]> = {}
-
-  for (const item of originData) {
-    const { name, version } = item
-
-    if (result[name])
-      result[name].push(version)
-
-    else
-      result[name] = [version]
-  }
-
-  return result
-}
-
 /**
- * @description 根据 shrink file 路径获取同级 package.json 文件中的项目名
- * @param {string} shrinkFilePath shrink file 路径
+ * @description 解析所有的 lock 文件
+ * @param root 根路径
+ * @returns {IParseRes}
  */
-async function getProjectInfo(packageJsonFilePath: string) {
-  const fileContent = await readFileSync(packageJsonFilePath, 'utf-8')
-
-  const fileContentToJson = JSON.parse(fileContent)
-
-  if (fileContentToJson) {
-    return {
-      projectName: fileContentToJson.name || '',
-      dependenceNameList: fileContentToJson.dependencies ? Object.keys(fileContentToJson.dependencies) : [],
-      devDependenceNameList: fileContentToJson.devDependencies ? Object.keys(fileContentToJson.devDependencies) : [],
-    }
-  }
-  else {
-    return {
-      projectName: '',
-      dependenceNameList: [],
-      devDependenceNameList: [],
-    }
-  }
-}
-
-// const res1 = parseLockFile('/Users/paulchess/Desktop/Home/@paulchess/lockfile-parse/locks/package-lock.json')
-// const res2 = parseLockFile('/Users/paulchess/Desktop/Home/@paulchess/lockfile-parse/locks/yarn.lock')
-// const res3 = parseLockFile('/Users/paulchess/Desktop/Home/@paulchess/lockfile-parse/locks/pnpm-lock.yaml')
-
-async function parseAllLockFile(root?: string) {
+async function parseLockFiles(root?: string) {
   const rootPath = root || cwd()
+  const res: IParseRes = []
 
   const shrinkFilePathList = await findShinkFiles(rootPath)
 
-  const res: IParseRes = []
+  try {
+    if (isTrueArray(shrinkFilePathList)) {
+      for (const shrinkFilePath of shrinkFilePathList) {
+        const packageJsonFilePath = join(
+          dirname(shrinkFilePath),
+          'package.json',
+        )
+        const projectInfo = await getProjectInfo(packageJsonFilePath)
+        const parseRes = parseSingleLockFile(shrinkFilePath)
 
-  if (isTrueArray(shrinkFilePathList)) {
-    for (const shrinkFilePath of shrinkFilePathList) {
-      const packageJsonFilePath = join(dirname(shrinkFilePath), 'package.json')
-      const projectInfo = await getProjectInfo(packageJsonFilePath)
-      const parseRes = parseLockFile(shrinkFilePath)
-
-      if (parseRes) {
-        res.push({
-          ...parseRes,
-          packageJsonFilePath,
-          lockFilePath: shrinkFilePath,
-          devDependenceNameList: projectInfo.devDependenceNameList,
-          dependenceNameList: projectInfo.dependenceNameList,
-          projectName: projectInfo.projectName,
-        })
+        if (parseRes) {
+          res.push({
+            projectName: projectInfo.projectName,
+            packageJsonFilePath,
+            lockFilePath: shrinkFilePath,
+            dependenceNameList: projectInfo.dependenceNameList,
+            devDependenceNameList: projectInfo.devDependenceNameList,
+            ...parseRes,
+          })
+        }
       }
     }
+    return res
   }
-  return res
+  catch (err) {
+    console.error('[@king-fisher/lockfile-parse parseLockFiles] error!')
+    console.error(err)
+  }
 }
 
-await parseAllLockFile('/Users/paulchess/Desktop/Home/@paulchess/lockfile-parse/locks')
+export { parseLockFiles, parseSingleLockFile }

@@ -12,17 +12,13 @@ export interface IParseLockRes {
   }
 }
 
-export type IParseRes = {
+export type IParseRes = ({
   lockFilePath: string
   packageJsonFilePath: string
   projectName: string
   dependenceNameList: string[]
   devDependenceNameList: string[]
-  dependenceList: IDependenceItem[]
-  dependenceMap: {
-    [key: string]: string[]
-  }
-}[]
+} & IParseLockRes)[]
 
 export interface PnpmLockResult {
   packages: Record<
