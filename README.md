@@ -103,4 +103,8 @@ parseLockFiles()
 
 `0.0.1-beta.1`
 
-优化代码，发一版 beta
+优化代码，发一版 beta。
+
+`0.0.2-beta.2`
+
+把 `types/index.ts` 改成 `types/index.d.ts`，使用户使用时可以拿到导出的类型。

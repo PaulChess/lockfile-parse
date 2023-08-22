@@ -1,76 +1,74 @@
 lockfileVersion: '6.0'
 
-importers:
+dependencies:
+  '@yarnpkg/lockfile':
+    specifier: ^1.1.0
+    version: 1.1.0
+  glob:
+    specifier: ^10.2.2
+    version: 10.2.6
+  js-yaml:
+    specifier: ^4.1.0
+    version: 4.1.0
+  picocolors:
+    specifier: ^1.0.0
+    version: 1.0.0
 
-  .:
-    dependencies:
-      '@yarnpkg/lockfile':
-        specifier: ^1.1.0
-        version: 1.1.0
-      glob:
-        specifier: ^10.2.2
-        version: 10.2.6
-      js-yaml:
-        specifier: ^4.1.0
-        version: 4.1.0
-      picocolors:
-        specifier: ^1.0.0
-        version: 1.0.0
-    devDependencies:
-      '@antfu/eslint-config':
-        specifier: ^0.39.8
-        version: 0.39.8(eslint@8.45.0)(typescript@5.1.6)
-      '@antfu/ni':
-        specifier: ^0.21.5
-        version: 0.21.5
-      '@antfu/utils':
-        specifier: ^0.7.5
-        version: 0.7.5
-      '@types/glob':
-        specifier: ^8.1.0
-        version: 8.1.0
-      '@types/js-yaml':
-        specifier: ^4.0.5
-        version: 4.0.5
-      '@types/node':
-        specifier: ^20.4.5
-        version: 20.4.5
-      '@types/yarnpkg__lockfile':
-        specifier: ^1.1.6
-        version: 1.1.6
-      bumpp:
-        specifier: ^9.1.1
-        version: 9.1.1
-      eslint:
-        specifier: ^8.45.0
-        version: 8.45.0
-      esno:
-        specifier: ^0.17.0
-        version: 0.17.0
-      lint-staged:
-        specifier: ^13.2.3
-        version: 13.2.3
-      pnpm:
-        specifier: ^8.6.10
-        version: 8.6.10
-      rimraf:
-        specifier: ^5.0.1
-        version: 5.0.1
-      simple-git-hooks:
-        specifier: ^2.9.0
-        version: 2.9.0
-      typescript:
-        specifier: ^5.1.6
-        version: 5.1.6
-      unbuild:
-        specifier: ^1.2.1
-        version: 1.2.1
-      vite:
-        specifier: ^4.4.7
-        version: 4.4.7(@types/node@20.4.5)
-      vitest:
-        specifier: ^0.33.0
-        version: 0.33.0
+devDependencies:
+  '@antfu/eslint-config':
+    specifier: ^0.39.8
+    version: 0.39.8(eslint@8.45.0)(typescript@5.1.6)
+  '@antfu/ni':
+    specifier: ^0.21.5
+    version: 0.21.5
+  '@antfu/utils':
+    specifier: ^0.7.5
+    version: 0.7.5
+  '@types/glob':
+    specifier: ^8.1.0
+    version: 8.1.0
+  '@types/js-yaml':
+    specifier: ^4.0.5
+    version: 4.0.5
+  '@types/node':
+    specifier: ^20.4.5
+    version: 20.4.5
+  '@types/yarnpkg__lockfile':
+    specifier: ^1.1.6
+    version: 1.1.6
+  bumpp:
+    specifier: ^9.1.1
+    version: 9.1.1
+  eslint:
+    specifier: ^8.45.0
+    version: 8.45.0
+  esno:
+    specifier: ^0.17.0
+    version: 0.17.0
+  lint-staged:
+    specifier: ^13.2.3
+    version: 13.2.3
+  pnpm:
+    specifier: ^8.6.10
+    version: 8.6.10
+  rimraf:
+    specifier: ^5.0.1
+    version: 5.0.1
+  simple-git-hooks:
+    specifier: ^2.9.0
+    version: 2.9.0
+  typescript:
+    specifier: ^5.1.6
+    version: 5.1.6
+  unbuild:
+    specifier: ^1.2.1
+    version: 1.2.1
+  vite:
+    specifier: ^4.4.7
+    version: 4.4.7(@types/node@20.4.5)
+  vitest:
+    specifier: ^0.33.0
+    version: 0.33.0
 
 packages:
 

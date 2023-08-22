@@ -8,7 +8,7 @@ import type {
   IParseLockRes,
   IParseRes,
   PnpmLockResult,
-} from './types'
+} from './types/index.d.ts'
 import { findShinkFiles } from './path'
 import {
   getProjectInfo,
