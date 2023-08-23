@@ -27,7 +27,7 @@ export interface IParseLockRes {
   }
 }
 
-export type IParseRes = ({
+export type IParseResItem = {
   /**
    * @param lock 文件路径
    */
@@ -54,7 +54,9 @@ export type IParseRes = ({
   firstLevelDependenceMap: {
     [key: string]: string[]
   }
-} & IParseLockRes)[]
+} & IParseLockRes
+
+export type IParseRes = IParseResItem[]
 
 export interface PnpmLockResult {
   packages: Record<

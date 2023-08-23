@@ -125,3 +125,7 @@ parseLockFiles()
 `0.0.1-beta.4`
 
 解析结果中增加 `firstLevelDependenceMap` 属性，表示一级依赖（dependencies & devDependencies) 版本关系 Map
+
+`0.0.1-beta.5`
+
+`types/index.d.ts` 中增加 `IParseResItem` 类型。

@@ -7,6 +7,7 @@ import type {
   IDependenceItem,
   IParseLockRes,
   IParseRes,
+  IParseResItem,
   PnpmLockResult,
 } from './types/index.d.ts'
 import { findShinkFiles } from './path'
@@ -186,6 +187,7 @@ export {
   parseLockFiles,
   parseSingleLockFile,
   IParseLockRes,
+  IParseResItem,
   IParseRes,
   IDependenceItem,
 }
