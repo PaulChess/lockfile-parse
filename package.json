@@ -44,6 +44,12 @@
     "test": "vitest",
     "typecheck": "tsc --noEmit"
   },
+  "dependencies": {
+    "@yarnpkg/lockfile": "^1.1.0",
+    "glob": "^10.2.2",
+    "js-yaml": "^4.1.0",
+    "picocolors": "^1.0.0"
+  },
   "devDependencies": {
     "@antfu/eslint-config": "^0.39.8",
     "@antfu/ni": "^0.21.5",
@@ -69,11 +75,5 @@
   },
   "lint-staged": {
     "*": "eslint --fix"
-  },
-  "dependencies": {
-    "@yarnpkg/lockfile": "^1.1.0",
-    "glob": "^10.2.2",
-    "js-yaml": "^4.1.0",
-    "picocolors": "^1.0.0"
   }
 }
