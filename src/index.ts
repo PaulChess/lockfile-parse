@@ -11,6 +11,7 @@ import type {
 } from './types/index.d.ts'
 import { findShinkFiles } from './path'
 import {
+  getFirstLevelDependenceMap,
   getProjectInfo,
   getShrinkFileName,
   isTrueArray,
@@ -147,16 +148,27 @@ async function parseLockFiles(root?: string) {
           dirname(shrinkFilePath),
           'package.json',
         )
-        const projectInfo = await getProjectInfo(packageJsonFilePath)
+        const { projectName, dependenceNameList, devDependenceNameList }
+          = await getProjectInfo(packageJsonFilePath)
         const parseRes = parseSingleLockFile(shrinkFilePath)
+
+        const firstLevelDependenceNameList = [
+          ...dependenceNameList,
+          ...devDependenceNameList,
+        ]
+        const firstLevelDependenceMap = getFirstLevelDependenceMap(
+          firstLevelDependenceNameList,
+          (parseRes as IParseLockRes).dependenceMap,
+        )
 
         if (parseRes) {
           res.push({
-            projectName: projectInfo.projectName,
+            projectName,
             packageJsonFilePath,
             lockFilePath: shrinkFilePath,
-            dependenceNameList: projectInfo.dependenceNameList,
-            devDependenceNameList: projectInfo.devDependenceNameList,
+            dependenceNameList,
+            devDependenceNameList,
+            firstLevelDependenceMap,
             ...parseRes,
           })
         }
@@ -170,4 +182,10 @@ async function parseLockFiles(root?: string) {
   }
 }
 
-export { parseLockFiles, parseSingleLockFile }
+export {
+  parseLockFiles,
+  parseSingleLockFile,
+  IParseLockRes,
+  IParseRes,
+  IDependenceItem,
+}

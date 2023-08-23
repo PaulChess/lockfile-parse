@@ -60,3 +60,22 @@ export function mergeVersions(originData: IDependenceItem[]) {
 
   return result
 }
+
+/**
+ *
+ * @param firstLevelDependenceNameList 一级依赖名称数组
+ * @param lockDependenceMap lock 文件依赖关系 Map
+ * @returns 一级依赖关系 Map
+ */
+export function getFirstLevelDependenceMap(
+  firstLevelDependenceNameList: string[],
+  lockDependenceMap: {
+    [key: string]: string[]
+  },
+) {
+  const res: Record<string, string[]> = {}
+  firstLevelDependenceNameList.forEach((name) => {
+    res[name] = lockDependenceMap[name]
+  })
+  return res
+}

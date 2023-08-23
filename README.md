@@ -42,6 +42,7 @@ parseLockFiles()
   * `devDependenceNameList` devDependence 依赖名称数组
   * `dependenceList` 从 lock 文件中解析出来的依赖版本信息对象数组
   * `dependenceMap` 由 dependenceList 转换而来，转成了一个对象，并且对相同名称但版本不同的依赖进行了版本合并处理
+  * `firstLevelDependenceMap` 一级依赖（dependencies & devDependencies) 版本关系 Map
 
 **说明**
 匹配所有的 `lock` 文件，并解析成指定返回格式。默认从当前命令执行的路径开始向内层匹配，如果传了 `root` 参数，则从指定的路径开始进行匹配。返回格式示例：
@@ -67,6 +68,10 @@ parseLockFiles()
     "dependenceMap": {
       "@atom/atom-ui": ["1.12.3"],
       "@babel/core-frame": ["7.12.11", "7.12.10"]
+    },
+    "firstLevelDependenceMap": {
+      "@atom/atom-ui": ["1.12.3"],
+      "@babel/core-frame": ["7.12.11", "7.12.10"]
     }
   },
   {
@@ -88,6 +93,10 @@ parseLockFiles()
     "dependenceMap": {
       "@atom/atom-ui": ["1.12.3"],
       "@babel/core-frame": ["7.12.11", "7.12.10"]
+    },
+    "firstLevelDependenceMap": {
+      "@atom/atom-ui": ["1.12.3"],
+      "@babel/core-frame": ["7.12.11", "7.12.10"]
     }
   }
 ]
@@ -105,6 +114,14 @@ parseLockFiles()
 
 优化代码，发一版 beta。
 
-`0.0.2-beta.2`
+`0.0.1-beta.2`
 
 把 `types/index.ts` 改成 `types/index.d.ts`，使用户使用时可以拿到导出的类型。
+
+`0.0.1-beta.3`
+
+从 `index.ts` 中导出类型
+
+`0.0.1-beta.4`
+
+解析结果中增加 `firstLevelDependenceMap` 属性，表示一级依赖（dependencies & devDependencies) 版本关系 Map
