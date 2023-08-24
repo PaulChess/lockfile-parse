@@ -145,6 +145,7 @@ async function parseLockFiles(root?: string) {
   try {
     if (isTrueArray(shrinkFilePathList)) {
       for (const shrinkFilePath of shrinkFilePathList) {
+        const projectRootPath = dirname(shrinkFilePath)
         const packageJsonFilePath = join(
           dirname(shrinkFilePath),
           'package.json',
@@ -165,6 +166,7 @@ async function parseLockFiles(root?: string) {
         if (parseRes) {
           res.push({
             projectName,
+            projectRootPath,
             packageJsonFilePath,
             lockFilePath: shrinkFilePath,
             dependenceNameList,

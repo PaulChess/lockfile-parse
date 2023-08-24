@@ -36,6 +36,7 @@ parseLockFiles()
 **返回值**
 * `<Array>` 一个对象数组，一个对象代表一个子项目对应的信息
   * `projectName` 项目名
+  * `projectRootPath` 项目根路径
   * `lockFilePath` lock 文件地址
   * `packageJsonFilePath` 同级 package.json 文件地址
   * `dependenceNameList` dependence 依赖名称数组
@@ -53,6 +54,7 @@ parseLockFiles()
     "projectName": "parent-project",
     "lockFilePath": "/Users/paulchess/Desktop/Home/@paulchess/parent-project/pnpm-lock.yaml",
     "packageJsonFilePath": "/Users/paulchess/Desktop/Home/@paulchess/parent-project/package.json",
+    "projectRootPath": "/Users/paulchess/Desktop/Home/@paulchess/parent-project",
     "dependenceNameList": ["@atom/atom-ui", "@king-fisher/utils"],
     "devDependenceNameList": ["@king-fisher/cli", "@babel/cli"],
     "dependenceList": [{
@@ -78,6 +80,7 @@ parseLockFiles()
     "projectName": "child-project",
     "lockFilePath": "/Users/paulchess/Desktop/Home/@paulchess/parent-project/child-project/yarn.lock",
     "packageJsonFilePath": "/Users/paulchess/Desktop/Home/@paulchess/parent-project/child-project/package.json",
+    "projectRootPath": "/Users/paulchess/Desktop/Home/@paulchess/parent-project/child-project",
     "dependenceNameList": ["@atom/atom-ui", "@king-fisher/utils"],
     "devDependenceNameList": ["@king-fisher/cli", "@babel/cli"],
     "dependenceList": [{
@@ -129,3 +132,7 @@ parseLockFiles()
 `0.0.1-beta.5`
 
 `types/index.d.ts` 中增加 `IParseResItem` 类型。
+
+`0.0.1-beta.6`
+
+`IParseResItem` 类型增加 `projectRootPath` 字段。

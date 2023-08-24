@@ -37,6 +37,10 @@ export type IParseResItem = {
    */
   packageJsonFilePath: string
   /**
+   * @param 项目根路径
+   */
+  projectRootPath: string
+  /**
    * @param 项目名
    */
   projectName: string
