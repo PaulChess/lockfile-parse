@@ -1,7 +1,7 @@
 {
   "name": "@king-fisher/lockfile-parse",
   "type": "module",
-  "version": "0.0.1-beta.6",
+  "version": "0.0.1-beta.7",
   "packageManager": "pnpm@8.6.10",
   "description": "",
   "author": "PaulChess(shenjiaqi)",
@@ -45,7 +45,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@yarnpkg/lockfile": "^1.1.0",
+    "@yarnpkg/lockfile": "1.1.0",
     "glob": "^10.2.2",
     "js-yaml": "^4.1.0",
     "picocolors": "^1.0.0"

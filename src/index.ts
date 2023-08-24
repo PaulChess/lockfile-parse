@@ -1,7 +1,8 @@
 import { readFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { cwd } from 'node:process'
-import yarnLock from '@yarnpkg/lockfile'
+import * as yarnLock from '@yarnpkg/lockfile'
+
 import yaml from 'js-yaml'
 import type {
   IDependenceItem,
@@ -51,7 +52,9 @@ function parseSingleLockFile(filePath: string) {
       }
     }
     else if (fileName === 'yarn.lock') {
-      const dependencies = yarnLock.parse(fileContent)?.object
+      const dependencies = yarnLock.parse
+        ? yarnLock.parse(fileContent)?.object
+        : (yarnLock as any).default.parse(fileContent)?.object
       const tempDependenceList: IDependenceItem[] = []
 
       for (const dependenceKey in dependencies) {
