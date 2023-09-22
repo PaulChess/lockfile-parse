@@ -37,18 +37,21 @@ function parseSingleLockFile(filePath: string) {
   try {
     if (fileName === 'package-lock.json') {
       const packageLock = JSON.parse(fileContent)
-      const { dependencies } = packageLock
+      // package-lock.json version 2 和 3 版本都存在 packages 字段，因此用该字段解析
+      const { packages } = packageLock
 
-      for (const packageKey in dependencies) {
-        const name = packageKey
-        const version = dependencies[packageKey].version
-        const unique = name + version
+      for (const packageKey in packages) {
+        if (packageKey && packageKey.startsWith('node_modules')) {
+          const name = packageKey.replace(/node_modules\//, '')
+          const version = packages[packageKey].version
+          const unique = name + version
 
-        parseLockFileRes.dependenceList.push({
-          name,
-          version,
-          unique,
-        })
+          parseLockFileRes.dependenceList.push({
+            name,
+            version,
+            unique,
+          })
+        }
       }
     }
     else if (fileName === 'yarn.lock') {
